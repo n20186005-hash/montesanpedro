@@ -1,0 +1,228 @@
+---
+import '../styles/global.css';
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || '';
+const canonical = siteUrl ? `${siteUrl}/` : undefined;
+const ogImage = siteUrl ? `${siteUrl}/og-cover.png` : undefined;
+
+const attractionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': ['TouristAttraction', 'Park'],
+  name: 'Monte de San Pedro',
+  description: 'Parque panorámico e antiga posición defensiva sobre o Atlántico na Coruña, con canóns Vickers, zonas verdes e vistas da costa.',
+  ...(canonical ? { url: canonical } : {}),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Estrada Os Fortes, 7',
+    postalCode: '15011',
+    addressLocality: 'A Coruña',
+    addressRegion: 'Galicia',
+    addressCountry: 'ES'
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: 43.3774825, longitude: -8.4380656 },
+  openingHours: 'O parque e os distintos servizos do recinto poden ter horarios propios; comproba a información municipal antes da visita.',
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.7', reviewCount: '12365', bestRating: '5' },
+  isAccessibleForFree: true
+};
+
+const faqs = [
+  { q: 'Hai que pagar entrada para visitar o Monte de San Pedro?', a: 'O acceso ao parque é gratuíto. Servizos específicos poden ter condicións ou horarios propios.' },
+  { q: 'Funciona o ascensor panorámico?', a: 'A información turística municipal indica actualmente que o ascensor panorámico está pechado temporalmente. Convén comprobar o estado oficial antes de ir.' },
+  { q: 'Canto tempo paga a pena reservar?', a: 'Para unha visita tranquila con miradoiros, canóns e zonas verdes, reserva aproximadamente entre 1 e 2 horas; máis se queres quedar ao solpor ou comer na zona.' },
+  { q: 'É unha boa visita con nenos?', a: 'Si. O parque dispón de amplas zonas verdes e espazos ao aire libre, aínda que cómpre manter supervisión nas zonas próximas aos desniveis.' },
+  { q: 'Pódese chegar en transporte público?', a: 'As liñas urbanas 3 e 3A conectan a contorna de San Pedro de Visma co resto da cidade. Revisa percorridos e paradas actualizados antes da saída.' }
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({q, a}) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } }))
+};
+---
+<!doctype html>
+<html lang="gl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Monte de San Pedro · Miradoiro atlántico da Coruña</title>
+  <meta name="description" content="Guía práctica do Monte de San Pedro: canóns Vickers, vistas do Atlántico, acceso, transporte, estacionamento, comida, custos e consellos de visita." />
+  {canonical && <link rel="canonical" href={canonical} />}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Monte de San Pedro · A Coruña" />
+  <meta property="og:description" content="Un antigo baluarte defensivo convertido en gran miradoiro atlántico." />
+  {canonical && <meta property="og:url" content={canonical} />}
+  {ogImage && <meta property="og:image" content={ogImage} />}
+  <meta name="theme-color" content="#071f28" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" />
+  <link rel="icon" href="/favicon-16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <script type="application/ld+json" set:html={JSON.stringify(attractionJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HXM22WWPKP', { anonymize_ip: true });
+  </script>
+</head>
+<body>
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#071f28]/90 text-white backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 lg:px-8">
+      <a href="#inicio" class="flex items-center gap-3" aria-label="Volver ao inicio">
+        <img src="/logo.svg" alt="Monte de San Pedro" width="200" height="50" class="h-10 w-auto" />
+      </a>
+      <nav class="hidden gap-5 text-sm font-semibold md:flex" aria-label="Navegación principal">
+        <a href="#historia" class="hover:text-[#d4c6a8]">Historia</a><a href="#visita" class="hover:text-[#d4c6a8]">Visita</a><a href="#chegar" class="hover:text-[#d4c6a8]">Como chegar</a><a href="#arredores" class="hover:text-[#d4c6a8]">Arredores</a><a href="#faq" class="hover:text-[#d4c6a8]">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="relative min-h-[92vh] overflow-hidden bg-[#071f28] text-white">
+      <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,31,40,.96)_0%,rgba(7,31,40,.78)_42%,rgba(7,31,40,.35)_72%,rgba(7,31,40,.6)_100%),url('https://upload.wikimedia.org/wikipedia/commons/8/87/Los_ca%C3%B1ones_del_Monte_San_Pedro_%2819748169143%29.jpg')] bg-cover bg-center"></div>
+      <div class="grain absolute inset-0 opacity-30"></div>
+      <div class="relative mx-auto flex min-h-[92vh] max-w-7xl items-end px-5 pb-16 pt-36 lg:px-8 lg:pb-24">
+        <div class="max-w-3xl">
+          <p class="kicker mb-5 text-[#d4c6a8]">A Coruña · Galicia · Atlántico</p>
+          <h1 class="section-title text-6xl font-bold leading-[.94] sm:text-7xl lg:text-8xl">Monte de<br/><span class="text-[#b9cfc8]">San Pedro</span></h1>
+          <p class="mt-7 max-w-2xl text-lg leading-8 text-white/80">Unha antiga batería costeira transformada nun parque suspendido sobre o mar: herba, pedra, dous xigantes Vickers e unha das vistas máis abertas da Coruña.</p>
+          <div class="mt-9 flex flex-wrap gap-3 text-sm font-bold">
+            <a href="#visita" class="rounded-full bg-[#d4c6a8] px-6 py-3 text-[#071f28] hover:bg-white">Planificar a visita</a>
+            <a href="https://maps.app.goo.gl/m7xw47wWnHsLna2b8" rel="noopener" class="rounded-full border border-white/30 px-6 py-3 hover:bg-white/10">Abrir en Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0b3542] text-white">
+      <div class="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-white/10 md:grid-cols-4">
+        <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">Valoración</div><div class="mt-2 text-3xl font-bold">4,7 / 5</div><p class="mt-1 text-sm text-white/60">12.365 valoracións indicadas en Google Maps</p></div>
+        <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">O mellor</div><div class="mt-2 text-3xl font-bold">360°</div><p class="mt-1 text-sm text-white/60">Mar, cidade e Costa Ártabra</p></div>
+        <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">Entrada</div><div class="mt-2 text-3xl font-bold">Gratuíta</div><p class="mt-1 text-sm text-white/60">Acceso xeral ao parque</p></div>
+        <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">Tempo recomendado</div><div class="mt-2 text-3xl font-bold">1–2 h</div><p class="mt-1 text-sm text-white/60">Máis se quedas ao solpor</p></div>
+      </div>
+    </section>
+
+    <section id="historia" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <div class="grid gap-12 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
+        <div>
+          <p class="kicker text-[#9b5a39]">Da defensa ao paseo</p>
+          <h2 class="section-title mt-4 text-5xl font-bold text-[#071f28]">Un monte que cambiou de misión</h2>
+          <p class="mt-7 text-lg leading-8 text-[#344d54]">O recinto foi unha posición defensiva costeira e converteuse en parque para a cidadanía e visitantes en 1999. Hoxe supera os 90.000 m² e combina memoria militar, céspede, sendeiros e grandes horizontes oceánicos.</p>
+          <div class="mt-8 border-l-4 border-[#9b5a39] pl-6 text-[#344d54]"><strong class="text-[#071f28]">As pezas protagonistas:</strong> dous canóns Vickers adquiridos en 1929 e instalados en 1933, con máis de 17 metros de lonxitude. Son a imaxe máis recoñecible do parque.</div>
+        </div>
+        <figure class="overflow-hidden rounded-[2rem] bg-[#071f28] shadow-2xl">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Los_ca%C3%B1ones_del_Monte_San_Pedro_%2819748169143%29.jpg" alt="Canón Vickers no Monte de San Pedro coa costa ao fondo" class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
+          <figcaption class="px-5 py-3 text-xs text-white/65">Foto: Contando Estrelas · CC BY-SA 2.0 · Wikimedia Commons</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="visita" class="bg-[#e6ebe4] py-20 lg:py-28">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <p class="kicker text-[#0b3542]">Plan de visita</p>
+        <h2 class="section-title mt-4 max-w-3xl text-5xl font-bold text-[#071f28]">O esencial, sen présa</h2>
+        <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <article class="card rounded-3xl p-7"><span class="text-3xl">◉</span><h3 class="mt-5 text-xl font-bold">Miradoiros e costa</h3><p class="mt-3 leading-7 text-[#4b6268]">Busca primeiro a liña do Atlántico: cara ao oeste, a costa esténdese ata Arteixo e, con boa visibilidade, cara ás Sisargas; cara ao leste ábrese a cidade e a Costa Ártabra.</p></article>
+          <article class="card rounded-3xl p-7"><span class="text-3xl">⚙</span><h3 class="mt-5 text-xl font-bold">Canóns Vickers</h3><p class="mt-3 leading-7 text-[#4b6268]">Rodea as dúas pezas históricas e fíxate na escala das cureñas, tubos e plataformas. Son o vínculo máis directo co pasado militar do monte.</p></article>
+          <article class="card rounded-3xl p-7"><span class="text-3xl">◒</span><h3 class="mt-5 text-xl font-bold">Cúpula Atlántica</h3><p class="mt-3 leading-7 text-[#4b6268]">O recinto conta cun miradoiro cuberto e centro de interpretación. Como os horarios poden cambiar por mantemento ou tempada, comproba a apertura municipal antes de ir.</p></article>
+          <article class="card rounded-3xl p-7"><span class="text-3xl">€</span><h3 class="mt-5 text-xl font-bold">Entrada e custos</h3><p class="mt-3 leading-7 text-[#4b6268]">O parque é de acceso gratuíto. Non é necesario mercar unha entrada para pasear polos espazos exteriores.</p></article>
+          <article class="card rounded-3xl p-7"><span class="text-3xl">☀</span><h3 class="mt-5 text-xl font-bold">Mellor momento</h3><p class="mt-3 leading-7 text-[#4b6268]">As últimas horas da tarde adoitan ofrecer luz baixa sobre o mar e un final de visita especialmente fotoxénico. Nun día despexado terás máis alcance visual.</p></article>
+          <article class="card rounded-3xl p-7"><span class="text-3xl">↔</span><h3 class="mt-5 text-xl font-bold">Duración</h3><p class="mt-3 leading-7 text-[#4b6268]">Calcula 1–2 horas para percorrer os puntos principais. Engade tempo se vas con nenos, queres comer ou pensas agardar polo solpor.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+        <figure class="order-2 overflow-hidden rounded-[2rem] bg-[#071f28] lg:order-1">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/C%C3%BApula_Atl%C3%A1ntica%2C_Parque_de_San_Pedro%2C_La_Coru%C3%B1a%2C_Espa%C3%B1a%2C_2015-09-25%2C_DD_131.JPG" alt="Cúpula Atlántica no Monte de San Pedro" class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
+          <figcaption class="px-5 py-3 text-xs text-white/65">Foto: Diego Delso · CC BY-SA 4.0 · Wikimedia Commons</figcaption>
+        </figure>
+        <div class="order-1 lg:order-2">
+          <p class="kicker text-[#9b5a39]">Aviso importante</p>
+          <h2 class="section-title mt-4 text-4xl font-bold text-[#071f28]">O ascensor panorámico está pechado temporalmente</h2>
+          <p class="mt-6 text-lg leading-8 text-[#445d63]">O ascensor esférico que une o paseo marítimo coa parte alta é un dos símbolos contemporáneos do Monte de San Pedro, pero a páxina turística municipal indícao como <strong>pechado temporalmente</strong>. Planifica a chegada por estrada, a pé ou en autobús e comproba o estado oficial se a túa visita depende del.</p>
+          <p class="mt-4 text-sm text-[#61757a]">Esta guía evita publicar prezos ou horarios antigos do elevador para non converter información histórica en información operativa.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="chegar" class="bg-[#071f28] py-20 text-white lg:py-28">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <p class="kicker text-[#b9cfc8]">Mobilidade</p>
+        <h2 class="section-title mt-4 text-5xl font-bold">Como chegar e onde deixar o coche</h2>
+        <div class="mt-10 grid gap-6 lg:grid-cols-3">
+          <div class="rounded-3xl border border-white/15 p-7"><h3 class="text-xl font-bold">En coche</h3><p class="mt-3 leading-7 text-white/70">Accede pola Estrada Os Fortes cara ao parque. Hai zonas de estacionamento na contorna do monte, pero en fins de semana e tardes de bo tempo pode haber máis demanda.</p></div>
+          <div class="rounded-3xl border border-white/15 p-7"><h3 class="text-xl font-bold">En autobús urbano</h3><p class="mt-3 leading-7 text-white/70">As liñas 3 e 3A serven o eixo de San Pedro de Visma e conectan con áreas centrais. Consulta a parada máis conveniente e os horarios do día na Compañía de Tranvías.</p></div>
+          <div class="rounded-3xl border border-white/15 p-7"><h3 class="text-xl font-bold">A pé</h3><p class="mt-3 leading-7 text-white/70">Podes integralo nun paseo pola costa desde Riazor e o Paseo Marítimo. Ten en conta o desnivel: co elevador pechado, a subida require máis esforzo.</p></div>
+        </div>
+        <div class="mt-10 overflow-hidden rounded-[2rem] border border-white/15 bg-white/5 p-2">
+          <iframe title="Mapa do Monte de San Pedro" src="https://www.google.com/maps?q=43.3774825,-8.4380656&z=15&output=embed&hl=gl" width="100%" height="480" style="border:0;border-radius:1.4rem" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="arredores" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <div class="grid gap-14 lg:grid-cols-2">
+        <div>
+          <p class="kicker text-[#9b5a39]">Comer preto</p>
+          <h2 class="section-title mt-4 text-4xl font-bold">Sabores con horizonte</h2>
+          <div class="mt-7 space-y-5">
+            <div class="card rounded-3xl p-6"><h3 class="text-xl font-bold">Árbore da Veira</h3><p class="mt-2 leading-7 text-[#53696e]">Restaurante de alta cociña situado no alto do monte, citado pola oficina de turismo municipal. É unha opción para converter a visita nun plan gastronómico.</p></div>
+            <div class="card rounded-3xl p-6"><h3 class="text-xl font-bold">Taberna 5 Mares</h3><p class="mt-2 leading-7 text-[#53696e]">Proposta máis informal no mesmo enclave, tamén mencionada pola información turística oficial.</p></div>
+            <p class="text-sm text-[#61757a]">Para máis variedade, os barrios de Os Rosales, Labañou e a zona de Riazor ofrecen cafeterías, tabernas e restaurantes a curta distancia en coche ou bus.</p>
+          </div>
+        </div>
+        <div>
+          <p class="kicker text-[#0b3542]">Combínao con</p>
+          <h2 class="section-title mt-4 text-4xl font-bold">Outros lugares da costa coruñesa</h2>
+          <div class="mt-7 grid gap-4 sm:grid-cols-2">
+            <div class="rounded-3xl bg-[#dfe8e2] p-6"><h3 class="font-bold">Paseo Marítimo</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">Unha ruta costeira ideal para enlazar o monte con praias e miradoiros urbanos.</p></div>
+            <div class="rounded-3xl bg-[#eae1d1] p-6"><h3 class="font-bold">Obelisco Millennium</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">Un fito contemporáneo no litoral, moi próximo ao acceso inferior do monte.</p></div>
+            <div class="rounded-3xl bg-[#dfe8e2] p-6"><h3 class="font-bold">Aquarium Finisterrae</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">Unha parada familiar para seguir explorando a relación da cidade co océano.</p></div>
+            <div class="rounded-3xl bg-[#eae1d1] p-6"><h3 class="font-bold">Torre de Hércules</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">O faro romano e a súa contorna completan unha xornada centrada na fachada atlántica.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="bg-[#d9dfd3] py-20 lg:py-24">
+      <div class="mx-auto max-w-4xl px-5 lg:px-8">
+        <p class="kicker text-[#0b3542]">FAQ</p>
+        <h2 class="section-title mt-4 text-5xl font-bold">Preguntas frecuentes</h2>
+        <div class="mt-9 space-y-3">
+          {faqs.map(item => <details class="rounded-2xl bg-white/70 p-5"><summary class="cursor-pointer font-bold">{item.q}</summary><p class="mt-3 leading-7 text-[#53696e]">{item.a}</p></details>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+      <h2 class="section-title text-3xl font-bold">Información práctica e fontes</h2>
+      <p class="mt-4 max-w-3xl leading-7 text-[#52676c]">Os datos históricos, o peche temporal do elevador e a descrición dos principais atractivos baséanse na información turística municipal da Coruña. Os percorridos de autobús deben verificarse no operador urbano antes da visita. As fotografías proceden de Wikimedia Commons baixo as licenzas indicadas nos pés de foto.</p>
+      <div class="mt-5 flex flex-wrap gap-3 text-sm font-bold">
+        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href="https://www.coruna.gal/tourism/en/what-to-do-in-a-coruna/nature-and-sports/parks-and-gardens/mount-san-pedro?argIdioma=es" rel="noopener">Turismo A Coruña</a>
+        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href="https://tranviascoruna.com/lineas-y-horarios/" rel="noopener">Liñas de autobús</a>
+        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href="https://maps.app.goo.gl/m7xw47wWnHsLna2b8" rel="noopener">Google Maps</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-[#061a21] px-5 py-12 text-white/70">
+    <div class="mx-auto max-w-7xl lg:px-3">
+      <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-start">
+        <div><img src="/logo.svg" alt="Monte de San Pedro" width="200" height="50" class="h-11 w-auto" /><p class="mt-4 max-w-xl text-sm leading-6">Guía independente creada para axudar a planificar unha visita ao Monte de San Pedro.</p></div>
+        <div class="flex flex-wrap gap-4 text-sm"><a href="#privacidade">Privacidade</a><a href="#termos">Termos</a><a href="#cookies">Cookies</a></div>
+      </div>
+      <div class="mt-8 grid gap-3 text-xs text-white/55">
+        <details id="privacidade"><summary class="cursor-pointer font-bold text-white/75">Privacidade</summary><p class="mt-2 max-w-3xl leading-5">Este sitio non solicita rexistro nin almacena perfís propios. Emprega Google Analytics 4 para medir uso agregado; o navegador pode aplicar as súas propias opcións de privacidade e bloqueo.</p></details>
+        <details id="termos"><summary class="cursor-pointer font-bold text-white/75">Termos de uso</summary><p class="mt-2 max-w-3xl leading-5">A información é orientativa. Horarios, accesos, servizos e condicións poden cambiar; confirma sempre os detalles operativos coas fontes oficiais antes de desprazarte.</p></details>
+        <details id="cookies"><summary class="cursor-pointer font-bold text-white/75">Configuración de cookies</summary><p class="mt-2 max-w-3xl leading-5">Podes limitar ou eliminar cookies desde a configuración do navegador. As ferramentas analíticas de terceiros poden establecer identificadores segundo a súa propia política.</p></details>
+      </div>
+      <p class="mt-8 border-t border-white/10 pt-6 text-xs text-white/45">Sitio non oficial. Non está afiliado nin representa ao Concello da Coruña, Turismo da Coruña ou Google.</p>
+    </div>
+  </footer>
+</body>
+</html>

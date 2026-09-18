@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" role="img" aria-labelledby="t d">
+<title id="t">Monte de San Pedro</title><desc id="d">Símbolo inspirado no canón Vickers, o horizonte atlántico e o monte</desc>
+<rect width="320" height="80" rx="16" fill="#071f28"/>
+<circle cx="42" cy="40" r="22" fill="#789261"/>
+<path d="M18 47c14-12 28-16 48-7-14 1-24 6-32 15z" fill="#edf5f2"/>
+<path d="M35 36h39v7H35z" fill="#d4c6a8"/>
+<path d="M62 33h7v13h-7z" fill="#9b5a39"/>
+<text x="84" y="35" fill="#edf5f2" font-size="18" font-family="Georgia,serif" font-weight="700">MONTE DE SAN PEDRO</text>
+<text x="84" y="56" fill="#b9cfc8" font-size="11" font-family="system-ui,sans-serif" letter-spacing="2.2">A CORUÑA · ATLÁNTICO</text>
+</svg>
