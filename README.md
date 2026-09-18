@@ -13,15 +13,30 @@ Sitio dunha soa páxina en galego dedicado ao Monte de San Pedro (A Coruña). O 
 
 Todas as versións do `package.json` están fixadas sen `latest`, `*` nin rangos flotantes.
 
-## Configurar o dominio
+## Dominio e SEO
 
-Hai un único punto de configuración: `astro.config.mjs`.
+O dominio de produción está configurado en `astro.config.mjs` (`https://montesanpedro.com`). De `Astro.site` derivan as URL absolutas (`canonical`, Open Graph, JSON-LD) e a activación de `@astrojs/sitemap`.
 
-```js
-const configuredSite = '';
-```
+Todos os datos da entidade están nun único bloque de constantes ao principio de `src/pages/index.astro`: nome oficial, nome curto, cidade, provincia, país, código postal, coordenadas, enderezo, ligazóns oficiais, lugares próximos e datos de sincronización de opinións. Para reutilizar a páxina noutro destino abonda con cambiar ese bloque.
 
-Mentres estea baleiro, o proxecto non require dominio: non emite canonical/OG absolutos e non activa `@astrojs/sitemap`. Cando teñas o dominio, escribe alí a URL completa e reconstrúe. O resto de URLs absolutas SEO derivan de `Astro.site`.
+## Valoracións e opinións de Google Maps
+
+A valoración (4,7 / 5) e o número de opinións (12.365) están sincronizados coas opinións de usuarios de Google Maps (`setembro de 2026`, constante `REVIEWS_SYNC_TIME`).
+
+- As cifras e as opinións móstranse **só na páxina**, coa atribución de orixe (`sincronizadas desde as opinións de usuarios de Google Maps`) e ligazón á ficha de Google Maps.
+- **Non** se envían como datos estruturados: o JSON-LD non inclúe `aggregateRating` nin `review`, para non presentar opinións de terceiros como propias.
+- Na sección `#opinions` indícase que a autoría e os dereitos pertencen aos autores das opinións e a Google Maps, e engádese o botón «Ver todas as opinións en Google Maps».
+
+Ao actualizar as cifras hai que revisar tamén a data de sincronización (`REVIEWS_SYNC_TIME`) e o texto de orixe da sección de fontes.
+
+> Nota de mantemento: as seis opinións que se amosan en `#opinions` son resumos redactados a partir dos temas recorrentes nas opinións públicas do lugar (vistas, solpor, acceso, aparcadoiro, canóns, ascensor pechado) e van atribuídas de forma xenérica a «Usuario de Google Maps». Antes de publicar definitivamente convén substituílas por extractos literais e verificados da ficha de Google Maps (cada autoría, sen inventar nomes nin datas).
+
+## PWA
+
+- `public/manifest.webmanifest`: nome, cores da marca, `display: standalone` e atallos.
+- `public/sw.js`: service worker que só cachea recursos do propio dominio (a analítica, o iframe de Google Maps e as imaxes externas van sempre á rede).
+- Iconas: `icon-192.png`, `icon-512.png` e `icon-maskable-512.png` xeradas a partir de `apple-touch-icon.png`.
+- O rexistro do service worker faise desde `src/pages/index.astro`.
 
 ## Desenvolvemento
 

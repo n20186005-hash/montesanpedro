@@ -1,0 +1,56 @@
+{
+  "id": "/",
+  "name": "Monte de San Pedro · A Coruña",
+  "short_name": "Monte S. Pedro",
+  "description": "Guía de visita do Monte de San Pedro, o miradoiro atlántico da Coruña: historia, canóns Vickers, localización, acceso, opinións e consellos prácticos.",
+  "lang": "gl",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "background_color": "#071f28",
+  "theme_color": "#071f28",
+  "categories": ["travel", "navigation", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Como chegar",
+      "short_name": "Como chegar",
+      "description": "Localización, transporte e estacionamento",
+      "url": "/#chegar"
+    },
+    {
+      "name": "Opinións de Google Maps",
+      "short_name": "Opinións",
+      "description": "Valoracións de usuarios sincronizadas desde Google Maps",
+      "url": "/#opinions"
+    }
+  ]
+}

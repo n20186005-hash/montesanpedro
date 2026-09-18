@@ -1,5 +1,6 @@
 ./.gitignore
 ./.node-version
+./pnpm-lock.yaml
 ./README.md
 ./astro.config.mjs
 ./docs/FILE-LIST.txt
@@ -9,9 +10,14 @@
 ./public/favicon-16.png
 ./public/favicon-32.png
 ./public/favicon.svg
+./public/icon-192.png
+./public/icon-512.png
+./public/icon-maskable-512.png
 ./public/logo.svg
+./public/manifest.webmanifest
 ./public/og-cover.png
 ./public/robots.txt
+./public/sw.js
 ./scripts/verify.sh
 ./src/pages/index.astro
 ./src/styles/global.css

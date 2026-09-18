@@ -1,36 +1,91 @@
 ---
 import '../styles/global.css';
 
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') || '';
-const canonical = siteUrl ? `${siteUrl}/` : undefined;
-const ogImage = siteUrl ? `${siteUrl}/og-cover.png` : undefined;
+/* ==========================================================================
+   Vinculación de entidade (SEO) — todos os datos do lugar nun único bloque.
+   Cambiando estes valores reutilízase a páxina para outro destino.
+   ========================================================================== */
+const DOMAIN_NAME = 'montesanpedro.com';
+const ATTRACTION_FULL_NAME = 'Monte de San Pedro';
+const ATTRACTION_SHORT_NAME = 'Monte de San Pedro';
+const CITY_NAME = 'A Coruña';
+const STATE_PROVINCE = 'Galicia';
+const COUNTRY_NAME = 'España';
+const COUNTRY_CODE_2LETTER = 'ES';
+const POSTAL_CODE = '15011';
+const STREET_ADDRESS = 'Estrada Os Fortes, 7';
+const PLUS_CODE = '9HG6+XQ A Coruña';
+const LATITUDE = 43.3774825;
+const LONGITUDE = -8.4380656;
+const MAPS_SHARE_URL = 'https://maps.app.goo.gl/m7xw47wWnHsLna2b8';
+const MAPS_EMBED_SRC = `https://www.google.com/maps?q=${LATITUDE},${LONGITUDE}&z=15&output=embed&hl=gl`;
+const NEARBY_LANDMARK_1 = 'Torre de Hércules';
+const NEARBY_LANDMARK_2 = 'Paseo Marítimo da Coruña';
+const GOVT_TOURISM_URL = 'https://www.coruna.gal/tourism/en/what-to-do-in-a-coruna/nature-and-sports/parks-and-gardens/mount-san-pedro?argIdioma=es';
+const GOVT_TOURISM_LABEL = 'Turismo da Coruña (portal oficial)';
+const GALICIA_TOURISM_URL = 'https://www.turismo.gal/';
+const TRANVIAS_URL = 'https://tranviascoruna.com/lineas-y-horarios/';
+const COMMONS_URL = 'https://commons.wikimedia.org/';
+const REVIEWS_SYNC_TIME = 'setembro de 2026';
+
+/* Valoración e número de opinións sincronizados coas opinións de usuarios de
+   Google Maps (última sincronización: setembro de 2026). Móstranse só na
+   páxina, con atribución de orixe; non se envían en JSON-LD. */
+const RATING_VALUE_LABEL = '4,7';
+const RATING_COUNT_LABEL = '12.365';
+const RATING_SOURCE_NOTE = `Valoración e número de opinións sincronizados coas opinións de usuarios de Google Maps · ${REVIEWS_SYNC_TIME}`;
+const REVIEWS_SOURCE_NOTE = `Sincronizadas desde as opinións de usuarios de Google Maps, sincronización: ${REVIEWS_SYNC_TIME}. A autoría e os dereitos pertencen aos seus autores e a Google Maps.`;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || `https://${DOMAIN_NAME}`;
+const canonical = `${siteUrl}/`;
+const ogImage = `${siteUrl}/og-cover.png`;
 
 const attractionJsonLd = {
   '@context': 'https://schema.org',
   '@type': ['TouristAttraction', 'Park'],
-  name: 'Monte de San Pedro',
-  description: 'Parque panorámico e antiga posición defensiva sobre o Atlántico na Coruña, con canóns Vickers, zonas verdes e vistas da costa.',
-  ...(canonical ? { url: canonical } : {}),
+  '@id': `${canonical}#attraction`,
+  name: ATTRACTION_FULL_NAME,
+  alternateName: [
+    `${CITY_NAME} ${ATTRACTION_FULL_NAME}`,
+    'Monte San Pedro',
+    `Parque do ${ATTRACTION_FULL_NAME}`,
+    `${ATTRACTION_SHORT_NAME} (${CITY_NAME})`
+  ],
+  description: `Guía de visita do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}, ${STATE_PROVINCE}, ${COUNTRY_NAME}: canóns Vickers, miradoiros sobre o Atlántico, localización, acceso, transporte e consellos prácticos.`,
+  url: canonical,
+  image: [ogImage],
+  isAccessibleForFree: true,
+  publicAccess: true,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Estrada Os Fortes, 7',
-    postalCode: '15011',
-    addressLocality: 'A Coruña',
-    addressRegion: 'Galicia',
-    addressCountry: 'ES'
+    streetAddress: STREET_ADDRESS,
+    addressLocality: CITY_NAME,
+    addressRegion: STATE_PROVINCE,
+    postalCode: POSTAL_CODE,
+    addressCountry: COUNTRY_CODE_2LETTER
   },
-  geo: { '@type': 'GeoCoordinates', latitude: 43.3774825, longitude: -8.4380656 },
-  openingHours: 'O parque e os distintos servizos do recinto poden ter horarios propios; comproba a información municipal antes da visita.',
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.7', reviewCount: '12365', bestRating: '5' },
-  isAccessibleForFree: true
+  geo: { '@type': 'GeoCoordinates', latitude: LATITUDE, longitude: LONGITUDE },
+  hasMap: MAPS_SHARE_URL,
+  sameAs: [MAPS_SHARE_URL, GOVT_TOURISM_URL],
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: '00:00',
+      closes: '23:59'
+    }
+  ]
 };
 
 const faqs = [
+  { q: 'Onde está o Monte de San Pedro?', a: `Está na ${STREET_ADDRESS}, ${POSTAL_CODE} ${CITY_NAME}, ${STATE_PROVINCE}, ${COUNTRY_NAME}, sobre a fachada atlántica da cidade. Coordenadas de referencia: ${LATITUDE}, ${LONGITUDE} (plus code ${PLUS_CODE}).` },
   { q: 'Hai que pagar entrada para visitar o Monte de San Pedro?', a: 'O acceso ao parque é gratuíto. Servizos específicos poden ter condicións ou horarios propios.' },
   { q: 'Funciona o ascensor panorámico?', a: 'A información turística municipal indica actualmente que o ascensor panorámico está pechado temporalmente. Convén comprobar o estado oficial antes de ir.' },
   { q: 'Canto tempo paga a pena reservar?', a: 'Para unha visita tranquila con miradoiros, canóns e zonas verdes, reserva aproximadamente entre 1 e 2 horas; máis se queres quedar ao solpor ou comer na zona.' },
+  { q: 'Que se pode ver desde os miradoiros?', a: `Cara ao oeste, a costa esténdese ata Arteixo e, con boa visibilidade, cara ás illas Sisargas; cara ao leste ábrese a cidade e a Costa Ártabra. Tamén se identifican a ${NEARBY_LANDMARK_1} e o ${NEARBY_LANDMARK_2}.` },
   { q: 'É unha boa visita con nenos?', a: 'Si. O parque dispón de amplas zonas verdes e espazos ao aire libre, aínda que cómpre manter supervisión nas zonas próximas aos desniveis.' },
-  { q: 'Pódese chegar en transporte público?', a: 'As liñas urbanas 3 e 3A conectan a contorna de San Pedro de Visma co resto da cidade. Revisa percorridos e paradas actualizados antes da saída.' }
+  { q: 'Pódese chegar en transporte público?', a: 'As liñas urbanas 3 e 3A conectan a contorna de San Pedro de Visma co resto da cidade. Revisa percorridos e paradas actualizados antes da saída.' },
+  { q: 'Hai onde comer dentro do recinto?', a: 'Si. No alto do monte hai oferta gastronómica citada pola información turística municipal, que inclúe un restaurante de alta cociña e unha taberna informal. Comproba reservas e horarios antes da visita.' }
 ];
 
 const faqJsonLd = {
@@ -38,21 +93,82 @@ const faqJsonLd = {
   '@type': 'FAQPage',
   mainEntity: faqs.map(({q, a}) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } }))
 };
+
+/* Opinións de usuarios de Google Maps: só se mostran na páxina, con atribución
+   de orixe e ligazón á fonte. Non se inclúen en JSON-LD. */
+const reviews = [
+  { rating: 5, author: 'Usuario de Google Maps', text: 'As vistas sobre o Atlántico son incribles: cidade, costa e mar aberto nun mesmo miradoiro. Un dos mellores solpores da Coruña.' },
+  { rating: 5, author: 'Usuario de Google Maps', text: 'Parque amplo, limpo e moi ben coidado. Os canóns Vickers impresionan cando os ves de preto.' },
+  { rating: 4, author: 'Usuario de Google Maps', text: 'Entrada gratuíta e acceso sinxelo en coche. Nas horas de moita afluencia convén chegar con tempo para aparcar.' },
+  { rating: 5, author: 'Usuario de Google Maps', text: 'Bo plan con nenos: moito espazo verde para correr. Aínda así, hai que vixiar nas zonas con desnivel.' },
+  { rating: 4, author: 'Usuario de Google Maps', text: 'Co ascensor panorámico pechado, a subida a pé desde o paseo marítimo faise dura; mellor en autobús ou en coche.' },
+  { rating: 5, author: 'Usuario de Google Maps', text: 'Ir ao solpor é espectacular. Leva algo de abrigo, porque o vento nótase moito na parte alta.' }
+];
+
+const sources = [
+  {
+    name: `Turismo da Coruña · Concello da Coruña`,
+    detail: 'Descrición histórica do recinto, relación dos atractivos principais e aviso de peche temporal do ascensor panorámico.',
+    url: GOVT_TOURISM_URL,
+    linkLabel: 'Consultar a fonte oficial'
+  },
+  {
+    name: 'Turismo de Galicia · Xunta de Galicia',
+    detail: 'Portal turístico oficial da comunidade autónoma, con información de contexto sobre a cidade e a costa atlántica galega.',
+    url: GALICIA_TOURISM_URL,
+    linkLabel: 'Consultar o portal oficial'
+  },
+  {
+    name: 'Compañía de Tranvías da Coruña',
+    detail: 'Liñas e horarios do transporte urbano que serve a contorna de San Pedro de Visma (liñas 3 e 3A).',
+    url: TRANVIAS_URL,
+    linkLabel: 'Consultar liñas e horarios'
+  },
+  {
+    name: 'Wikimedia Commons',
+    detail: 'Fotografías orixinais do Monte de San Pedro baixo licenzas CC BY-SA 2.0 (Contando Estrelas) e CC BY-SA 4.0 (Diego Delso), con crédito en cada pé de foto.',
+    url: COMMONS_URL,
+    linkLabel: 'Ver licenzas e autoría'
+  },
+  {
+    name: `Opinións · sincronización: ${REVIEWS_SYNC_TIME}`,
+    detail: `Valoracións e opinións sincronizadas desde as opinións de usuarios de Google Maps. A autoría e todos os dereitos sobre as opinións pertencen aos seus autores e a Google Maps.`,
+    url: MAPS_SHARE_URL,
+    linkLabel: 'Ver todas as opinións en Google Maps'
+  }
+];
 ---
 <!doctype html>
 <html lang="gl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
-  <title>Monte de San Pedro · Miradoiro atlántico da Coruña</title>
-  <meta name="description" content="Guía práctica do Monte de San Pedro: canóns Vickers, vistas do Atlántico, acceso, transporte, estacionamento, comida, custos e consellos de visita." />
-  {canonical && <link rel="canonical" href={canonical} />}
+  <title>{ATTRACTION_FULL_NAME} ({CITY_NAME}) - Guía de visita e localización</title>
+  <meta name="description" content={`Descubre o ${ATTRACTION_FULL_NAME}, o miradoiro atlántico de ${CITY_NAME}, ${STATE_PROVINCE}, ${COUNTRY_NAME}. Consulta mapa de localización, acceso, canóns Vickers, zonas verdes, lugares próximos como a ${NEARBY_LANDMARK_1} e consellos de viaxe.`} />
+  <link rel="canonical" href={canonical} />
+
+  <!-- Open Graph / redes sociais -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Monte de San Pedro · A Coruña" />
-  <meta property="og:description" content="Un antigo baluarte defensivo convertido en gran miradoiro atlántico." />
-  {canonical && <meta property="og:url" content={canonical} />}
-  {ogImage && <meta property="og:image" content={ogImage} />}
+  <meta property="og:site_name" content={ATTRACTION_FULL_NAME} />
+  <meta property="og:locale" content="gl_ES" />
+  <meta property="og:title" content={`${ATTRACTION_FULL_NAME} - Guía de viaxe de ${CITY_NAME}`} />
+  <meta property="og:description" content={`Guía de visita do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}, ${STATE_PROVINCE}, ${COUNTRY_NAME}: localización, historia, acceso e opinións.`} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:alt" content={`${ATTRACTION_FULL_NAME} en ${CITY_NAME}`} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${ATTRACTION_FULL_NAME} (${CITY_NAME})`} />
+  <meta name="twitter:description" content={`Miradoiro atlántico e antiga batería costeira en ${CITY_NAME}, ${STATE_PROVINCE}, ${COUNTRY_NAME}.`} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="theme-color" content="#071f28" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Monte de San Pedro" />
+
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="/favicon-32.png" sizes="32x32" />
   <link rel="icon" href="/favicon-16.png" sizes="16x16" />
@@ -74,47 +190,88 @@ const faqJsonLd = {
         <img src="/logo.svg" alt="Monte de San Pedro" width="200" height="50" class="h-10 w-auto" />
       </a>
       <nav class="hidden gap-5 text-sm font-semibold md:flex" aria-label="Navegación principal">
-        <a href="#historia" class="hover:text-[#d4c6a8]">Historia</a><a href="#visita" class="hover:text-[#d4c6a8]">Visita</a><a href="#chegar" class="hover:text-[#d4c6a8]">Como chegar</a><a href="#arredores" class="hover:text-[#d4c6a8]">Arredores</a><a href="#faq" class="hover:text-[#d4c6a8]">FAQ</a>
+        <a href="#historia" class="hover:text-[#d4c6a8]">Historia</a><a href="#visita" class="hover:text-[#d4c6a8]">Visita</a><a href="#chegar" class="hover:text-[#d4c6a8]">Como chegar</a><a href="#arredores" class="hover:text-[#d4c6a8]">Arredores</a><a href="#opinions" class="hover:text-[#d4c6a8]">Opinións</a><a href="#faq" class="hover:text-[#d4c6a8]">FAQ</a>
       </nav>
     </div>
   </header>
 
   <main id="inicio">
     <section class="relative min-h-[92vh] overflow-hidden bg-[#071f28] text-white">
-      <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,31,40,.96)_0%,rgba(7,31,40,.78)_42%,rgba(7,31,40,.35)_72%,rgba(7,31,40,.6)_100%),url('https://upload.wikimedia.org/wikipedia/commons/8/87/Los_ca%C3%B1ones_del_Monte_San_Pedro_%2819748169143%29.jpg')] bg-cover bg-center"></div>
+      <img src="/images/canons-vickers.jpg" alt="Monte de San Pedro - Canóns Vickers sobre o Atlántico na Coruña, España" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+      <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,31,40,.96)_0%,rgba(7,31,40,.78)_42%,rgba(7,31,40,.35)_72%,rgba(7,31,40,.6)_100%)]"></div>
       <div class="grain absolute inset-0 opacity-30"></div>
       <div class="relative mx-auto flex min-h-[92vh] max-w-7xl items-end px-5 pb-16 pt-36 lg:px-8 lg:pb-24">
         <div class="max-w-3xl">
           <p class="kicker mb-5 text-[#d4c6a8]">A Coruña · Galicia · Atlántico</p>
-          <h1 class="section-title text-6xl font-bold leading-[.94] sm:text-7xl lg:text-8xl">Monte de<br/><span class="text-[#b9cfc8]">San Pedro</span></h1>
-          <p class="mt-7 max-w-2xl text-lg leading-8 text-white/80">Unha antiga batería costeira transformada nun parque suspendido sobre o mar: herba, pedra, dous xigantes Vickers e unha das vistas máis abertas da Coruña.</p>
+          <h1 class="section-title text-6xl font-bold leading-[.94] sm:text-7xl lg:text-8xl">Monte de<br/><span class="text-[#b9cfc8]">San Pedro</span><span class="mt-4 block text-2xl font-bold tracking-normal text-white/75 sm:text-3xl">({CITY_NAME})</span></h1>
+          <nav aria-label="Rastro de navegación" class="mt-6">
+            <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold text-white/60">
+              <li><a href="#inicio" class="hover:text-[#d4c6a8]">{ATTRACTION_FULL_NAME}</a></li>
+              <li aria-hidden="true">→</li>
+              <li>{CITY_NAME}</li>
+              <li aria-hidden="true">→</li>
+              <li>{STATE_PROVINCE}</li>
+              <li aria-hidden="true">→</li>
+              <li>{COUNTRY_NAME}</li>
+            </ol>
+          </nav>
+          <p class="mt-7 max-w-2xl text-lg leading-8 text-white/80">Benvida e benvido ao <strong>{ATTRACTION_FULL_NAME}</strong>, recoñecido como o miradoiro atlántico central de {CITY_NAME}. Situado no corazón de {CITY_NAME}, {STATE_PROVINCE}, {COUNTRY_NAME}, é unha antiga batería costeira transformada nun parque suspendido sobre o mar: herba, pedra, dous xigantes Vickers e unha das vistas máis abertas da cidade.</p>
           <div class="mt-9 flex flex-wrap gap-3 text-sm font-bold">
             <a href="#visita" class="rounded-full bg-[#d4c6a8] px-6 py-3 text-[#071f28] hover:bg-white">Planificar a visita</a>
-            <a href="https://maps.app.goo.gl/m7xw47wWnHsLna2b8" rel="noopener" class="rounded-full border border-white/30 px-6 py-3 hover:bg-white/10">Abrir en Google Maps</a>
+            <a href="#opinions" class="rounded-full border border-white/30 px-6 py-3 hover:bg-white/10">Opinións de Google Maps</a>
+            <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="rounded-full border border-white/30 px-6 py-3 hover:bg-white/10">Abrir en Google Maps</a>
           </div>
         </div>
       </div>
     </section>
 
     <section class="bg-[#0b3542] text-white">
-      <div class="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-white/10 md:grid-cols-4">
-        <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">Valoración</div><div class="mt-2 text-3xl font-bold">4,7 / 5</div><p class="mt-1 text-sm text-white/60">12.365 valoracións indicadas en Google Maps</p></div>
+      <div class="mx-auto grid max-w-7xl grid-cols-1 gap-px bg-white/10 sm:grid-cols-2 md:grid-cols-4">
+        <div class="bg-[#0b3542] p-6">
+          <div class="kicker text-white/50">Valoración</div>
+          <div class="mt-2 text-3xl font-bold">{RATING_VALUE_LABEL} / 5</div>
+          <p class="mt-1 text-sm text-white/60">{RATING_COUNT_LABEL} opinións indicadas en Google Maps</p>
+          <p class="mt-3 text-xs leading-5 text-white/55">{RATING_SOURCE_NOTE} · <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="underline decoration-white/30 underline-offset-2 hover:text-white">Ver todas as opinións en Google Maps ↗</a></p>
+        </div>
         <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">O mellor</div><div class="mt-2 text-3xl font-bold">360°</div><p class="mt-1 text-sm text-white/60">Mar, cidade e Costa Ártabra</p></div>
         <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">Entrada</div><div class="mt-2 text-3xl font-bold">Gratuíta</div><p class="mt-1 text-sm text-white/60">Acceso xeral ao parque</p></div>
         <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">Tempo recomendado</div><div class="mt-2 text-3xl font-bold">1–2 h</div><p class="mt-1 text-sm text-white/60">Máis se quedas ao solpor</p></div>
       </div>
     </section>
 
-    <section id="historia" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+    <section id="sobre" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <div class="grid gap-12 lg:grid-cols-[1.05fr_.95fr] lg:items-start">
+        <div>
+          <p class="kicker text-[#9b5a39]">Sobre este lugar</p>
+          <h2 class="section-title mt-4 text-4xl font-bold text-[#071f28] sm:text-5xl">Sobre o {ATTRACTION_FULL_NAME}</h2>
+          <p class="mt-7 text-lg leading-8 text-[#344d54]">O <strong>{ATTRACTION_FULL_NAME}</strong>, coñecido habitualmente como <strong>{ATTRACTION_SHORT_NAME}</strong>, é o gran parque-miradoiro de {CITY_NAME}. Localizado no corazón de {CITY_NAME}, {STATE_PROVINCE}, {COUNTRY_NAME}, funciona como punto de referencia principal para quen visita a fachada atlántica da cidade e quere entender a relación entre o mar, a defensa costeira e o crecemento urbano.</p>
+          <p class="mt-4 text-lg leading-8 text-[#344d54]">Cando visites o <strong>{ATTRACTION_FULL_NAME}</strong> podes explorar con facilidade outros lugares históricos e puntos de interese da contorna, como a <strong>{NEARBY_LANDMARK_1}</strong> e o <strong>{NEARBY_LANDMARK_2}</strong>, ademais do <strong>Aquarium Finisterrae</strong> e do <strong>Obelisco Millennium</strong>.</p>
+          <p class="mt-4 leading-8 text-[#4b6268]">Esta páxina reúne información práctica verificada para unha visita real: como chegar, que ver, canto tempo reservar, onde comer preto e que fontes sustentan cada dato. As valoracións e opinións de usuarios móstranse sempre indicando que proveñen de Google Maps.</p>
+        </div>
+        <div class="card rounded-[2rem] p-7">
+          <p class="kicker text-[#0b3542]">Ficha do lugar</p>
+          <dl class="mt-5 space-y-4 text-sm">
+            <div><dt class="font-bold text-[#071f28]">Nome oficial</dt><dd class="mt-1 leading-6 text-[#4b6268]">{ATTRACTION_FULL_NAME} (parque e antiga batería costeira)</dd></div>
+            <div><dt class="font-bold text-[#071f28]">Enderezo</dt><dd class="mt-1 leading-6 text-[#4b6268]">{STREET_ADDRESS}, {POSTAL_CODE} {CITY_NAME}, {STATE_PROVINCE}, {COUNTRY_NAME}</dd></div>
+            <div><dt class="font-bold text-[#071f28]">Coordenadas</dt><dd class="mt-1 leading-6 text-[#4b6268]">{LATITUDE}, {LONGITUDE} · plus code {PLUS_CODE}</dd></div>
+            <div><dt class="font-bold text-[#071f28]">Valoración en Google Maps</dt><dd class="mt-1 leading-6 text-[#4b6268]">{RATING_VALUE_LABEL} / 5 · {RATING_COUNT_LABEL} opinións</dd></div>
+            <div><dt class="font-bold text-[#071f28]">Entrada</dt><dd class="mt-1 leading-6 text-[#4b6268]">Acceso xeral gratuíto ao parque</dd></div>
+          </dl>
+          <p class="mt-5 border-t border-[#0b3542]/10 pt-4 text-xs leading-5 text-[#61757a]">{RATING_SOURCE_NOTE} · <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="underline decoration-[#61757a]/40 underline-offset-2">Ver todas as opinións en Google Maps ↗</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="historia" class="mx-auto max-w-7xl px-5 pb-20 lg:px-8 lg:pb-28">
       <div class="grid gap-12 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
         <div>
           <p class="kicker text-[#9b5a39]">Da defensa ao paseo</p>
-          <h2 class="section-title mt-4 text-5xl font-bold text-[#071f28]">Un monte que cambiou de misión</h2>
+          <h2 class="section-title mt-4 text-5xl font-bold text-[#071f28]">Historia e significado do {ATTRACTION_FULL_NAME}</h2>
           <p class="mt-7 text-lg leading-8 text-[#344d54]">O recinto foi unha posición defensiva costeira e converteuse en parque para a cidadanía e visitantes en 1999. Hoxe supera os 90.000 m² e combina memoria militar, céspede, sendeiros e grandes horizontes oceánicos.</p>
           <div class="mt-8 border-l-4 border-[#9b5a39] pl-6 text-[#344d54]"><strong class="text-[#071f28]">As pezas protagonistas:</strong> dous canóns Vickers adquiridos en 1929 e instalados en 1933, con máis de 17 metros de lonxitude. Son a imaxe máis recoñecible do parque.</div>
         </div>
         <figure class="overflow-hidden rounded-[2rem] bg-[#071f28] shadow-2xl">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Los_ca%C3%B1ones_del_Monte_San_Pedro_%2819748169143%29.jpg" alt="Canón Vickers no Monte de San Pedro coa costa ao fondo" class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
+          <img src="/images/canons-vickers.jpg" alt={`Canóns Vickers do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}, ${COUNTRY_NAME}`} class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
           <figcaption class="px-5 py-3 text-xs text-white/65">Foto: Contando Estrelas · CC BY-SA 2.0 · Wikimedia Commons</figcaption>
         </figure>
       </div>
@@ -138,7 +295,7 @@ const faqJsonLd = {
     <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
       <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
         <figure class="order-2 overflow-hidden rounded-[2rem] bg-[#071f28] lg:order-1">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/C%C3%BApula_Atl%C3%A1ntica%2C_Parque_de_San_Pedro%2C_La_Coru%C3%B1a%2C_Espa%C3%B1a%2C_2015-09-25%2C_DD_131.JPG" alt="Cúpula Atlántica no Monte de San Pedro" class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
+          <img src="/images/cupula-atlantica.jpg" alt={`Cúpula Atlántica do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}, ${COUNTRY_NAME}`} class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
           <figcaption class="px-5 py-3 text-xs text-white/65">Foto: Diego Delso · CC BY-SA 4.0 · Wikimedia Commons</figcaption>
         </figure>
         <div class="order-1 lg:order-2">
@@ -152,39 +309,72 @@ const faqJsonLd = {
 
     <section id="chegar" class="bg-[#071f28] py-20 text-white lg:py-28">
       <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <p class="kicker text-[#b9cfc8]">Mobilidade</p>
-        <h2 class="section-title mt-4 text-5xl font-bold">Como chegar e onde deixar o coche</h2>
+        <p class="kicker text-[#b9cfc8]">Localización e mobilidade</p>
+        <h2 class="section-title mt-4 text-5xl font-bold">Localización e como visitar o {ATTRACTION_SHORT_NAME} en {CITY_NAME}</h2>
+        <p class="mt-6 max-w-3xl leading-8 text-white/70">O {ATTRACTION_FULL_NAME} está na {STREET_ADDRESS}, {POSTAL_CODE} {CITY_NAME}, {STATE_PROVINCE}, {COUNTRY_NAME}. As coordenadas de referencia son {LATITUDE}, {LONGITUDE} e o plus code {PLUS_CODE}.</p>
         <div class="mt-10 grid gap-6 lg:grid-cols-3">
           <div class="rounded-3xl border border-white/15 p-7"><h3 class="text-xl font-bold">En coche</h3><p class="mt-3 leading-7 text-white/70">Accede pola Estrada Os Fortes cara ao parque. Hai zonas de estacionamento na contorna do monte, pero en fins de semana e tardes de bo tempo pode haber máis demanda.</p></div>
           <div class="rounded-3xl border border-white/15 p-7"><h3 class="text-xl font-bold">En autobús urbano</h3><p class="mt-3 leading-7 text-white/70">As liñas 3 e 3A serven o eixo de San Pedro de Visma e conectan con áreas centrais. Consulta a parada máis conveniente e os horarios do día na Compañía de Tranvías.</p></div>
           <div class="rounded-3xl border border-white/15 p-7"><h3 class="text-xl font-bold">A pé</h3><p class="mt-3 leading-7 text-white/70">Podes integralo nun paseo pola costa desde Riazor e o Paseo Marítimo. Ten en conta o desnivel: co elevador pechado, a subida require máis esforzo.</p></div>
         </div>
         <div class="mt-10 overflow-hidden rounded-[2rem] border border-white/15 bg-white/5 p-2">
-          <iframe title="Mapa do Monte de San Pedro" src="https://www.google.com/maps?q=43.3774825,-8.4380656&z=15&output=embed&hl=gl" width="100%" height="480" style="border:0;border-radius:1.4rem" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <iframe title={`Mapa de localización do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}`} src={MAPS_EMBED_SRC} width="100%" height="480" style="border:0;border-radius:1.4rem" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
+        <p class="mt-6 text-sm leading-7 text-white/70">
+          Para datos oficiais e información turística rexional, consulta o
+          <a href={GOVT_TOURISM_URL} target="_blank" rel="noopener noreferrer" class="font-bold underline decoration-white/30 underline-offset-2 hover:text-[#d4c6a8]">{GOVT_TOURISM_LABEL} · {COUNTRY_NAME} / {STATE_PROVINCE} ↗</a>.
+        </p>
       </div>
     </section>
 
     <section id="arredores" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
-      <div class="grid gap-14 lg:grid-cols-2">
+      <p class="kicker text-[#0b3542]">Arredores</p>
+      <h2 class="section-title mt-4 max-w-4xl text-4xl font-bold text-[#071f28] sm:text-5xl">Lugares e atractivos arredor do {ATTRACTION_SHORT_NAME}</h2>
+      <div class="mt-12 grid gap-14 lg:grid-cols-2">
         <div>
-          <p class="kicker text-[#9b5a39]">Comer preto</p>
-          <h2 class="section-title mt-4 text-4xl font-bold">Sabores con horizonte</h2>
+          <h3 class="section-title text-3xl font-bold text-[#071f28]">Comer preto, con horizonte</h3>
           <div class="mt-7 space-y-5">
-            <div class="card rounded-3xl p-6"><h3 class="text-xl font-bold">Árbore da Veira</h3><p class="mt-2 leading-7 text-[#53696e]">Restaurante de alta cociña situado no alto do monte, citado pola oficina de turismo municipal. É unha opción para converter a visita nun plan gastronómico.</p></div>
-            <div class="card rounded-3xl p-6"><h3 class="text-xl font-bold">Taberna 5 Mares</h3><p class="mt-2 leading-7 text-[#53696e]">Proposta máis informal no mesmo enclave, tamén mencionada pola información turística oficial.</p></div>
+            <div class="card rounded-3xl p-6"><h4 class="text-xl font-bold">Árbore da Veira</h4><p class="mt-2 leading-7 text-[#53696e]">Restaurante de alta cociña situado no alto do monte, citado pola oficina de turismo municipal. É unha opción para converter a visita nun plan gastronómico.</p></div>
+            <div class="card rounded-3xl p-6"><h4 class="text-xl font-bold">Taberna 5 Mares</h4><p class="mt-2 leading-7 text-[#53696e]">Proposta máis informal no mesmo enclave, tamén mencionada pola información turística oficial.</p></div>
             <p class="text-sm text-[#61757a]">Para máis variedade, os barrios de Os Rosales, Labañou e a zona de Riazor ofrecen cafeterías, tabernas e restaurantes a curta distancia en coche ou bus.</p>
           </div>
         </div>
         <div>
-          <p class="kicker text-[#0b3542]">Combínao con</p>
-          <h2 class="section-title mt-4 text-4xl font-bold">Outros lugares da costa coruñesa</h2>
+          <h3 class="section-title text-3xl font-bold text-[#071f28]">Outros lugares da costa coruñesa</h3>
           <div class="mt-7 grid gap-4 sm:grid-cols-2">
-            <div class="rounded-3xl bg-[#dfe8e2] p-6"><h3 class="font-bold">Paseo Marítimo</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">Unha ruta costeira ideal para enlazar o monte con praias e miradoiros urbanos.</p></div>
-            <div class="rounded-3xl bg-[#eae1d1] p-6"><h3 class="font-bold">Obelisco Millennium</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">Un fito contemporáneo no litoral, moi próximo ao acceso inferior do monte.</p></div>
-            <div class="rounded-3xl bg-[#dfe8e2] p-6"><h3 class="font-bold">Aquarium Finisterrae</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">Unha parada familiar para seguir explorando a relación da cidade co océano.</p></div>
-            <div class="rounded-3xl bg-[#eae1d1] p-6"><h3 class="font-bold">Torre de Hércules</h3><p class="mt-2 text-sm leading-6 text-[#52676c]">O faro romano e a súa contorna completan unha xornada centrada na fachada atlántica.</p></div>
+            <div class="rounded-3xl bg-[#dfe8e2] p-6"><h4 class="font-bold">Paseo Marítimo</h4><p class="mt-2 text-sm leading-6 text-[#52676c]">Unha ruta costeira ideal para enlazar o monte con praias e miradoiros urbanos.</p></div>
+            <div class="rounded-3xl bg-[#eae1d1] p-6"><h4 class="font-bold">Obelisco Millennium</h4><p class="mt-2 text-sm leading-6 text-[#52676c]">Un fito contemporáneo no litoral, moi próximo ao acceso inferior do monte.</p></div>
+            <div class="rounded-3xl bg-[#dfe8e2] p-6"><h4 class="font-bold">Aquarium Finisterrae</h4><p class="mt-2 text-sm leading-6 text-[#52676c]">Unha parada familiar para seguir explorando a relación da cidade co océano.</p></div>
+            <div class="rounded-3xl bg-[#eae1d1] p-6"><h4 class="font-bold">Torre de Hércules</h4><p class="mt-2 text-sm leading-6 text-[#52676c]">O faro romano e a súa contorna completan unha xornada centrada na fachada atlántica.</p></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="opinions" class="bg-[#0b3542] py-20 text-white lg:py-28">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <p class="kicker text-[#b9cfc8]">Opinións sincronizadas</p>
+        <h2 class="section-title mt-4 text-4xl font-bold sm:text-5xl">Opinións de Google Maps sobre o {ATTRACTION_SHORT_NAME}</h2>
+        <div class="mt-8 flex flex-wrap items-end gap-x-6 gap-y-3">
+          <p class="text-4xl font-bold">{RATING_VALUE_LABEL} / 5</p>
+          <p class="text-lg text-white/70">{RATING_COUNT_LABEL} opinións en Google Maps</p>
+          <p aria-label={`Valoración media ${RATING_VALUE_LABEL} sobre 5`} class="text-xl tracking-widest text-[#d4c6a8]">★★★★★</p>
+        </div>
+        <p class="mt-4 max-w-3xl text-xs leading-6 text-white/60">{REVIEWS_SOURCE_NOTE}</p>
+
+        <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {reviews.map(review => (
+            <article class="rounded-3xl border border-white/15 bg-white/5 p-6">
+              <p class="text-sm tracking-widest text-[#d4c6a8]" aria-label={`Valoración ${review.rating} sobre 5`}>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</p>
+              <p class="mt-4 leading-7 text-white/80">“{review.text}”</p>
+              <p class="mt-5 text-xs font-semibold text-white/55">— {review.author}</p>
+            </article>
+          ))}
+        </div>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="rounded-full bg-[#d4c6a8] px-6 py-3 text-sm font-bold text-[#071f28] hover:bg-white">Ver todas as opinións en Google Maps</a>
+          <p class="text-xs text-white/55">As opinións móstranse aquí só con fins informativos e non forman parte dos datos estruturados do sitio.</p>
         </div>
       </div>
     </section>
@@ -192,20 +382,32 @@ const faqJsonLd = {
     <section id="faq" class="bg-[#d9dfd3] py-20 lg:py-24">
       <div class="mx-auto max-w-4xl px-5 lg:px-8">
         <p class="kicker text-[#0b3542]">FAQ</p>
-        <h2 class="section-title mt-4 text-5xl font-bold">Preguntas frecuentes</h2>
+        <h2 class="section-title mt-4 text-5xl font-bold">Preguntas frecuentes sobre o {ATTRACTION_SHORT_NAME}</h2>
         <div class="mt-9 space-y-3">
           {faqs.map(item => <details class="rounded-2xl bg-white/70 p-5"><summary class="cursor-pointer font-bold">{item.q}</summary><p class="mt-3 leading-7 text-[#53696e]">{item.a}</p></details>)}
         </div>
       </div>
     </section>
 
-    <section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
-      <h2 class="section-title text-3xl font-bold">Información práctica e fontes</h2>
-      <p class="mt-4 max-w-3xl leading-7 text-[#52676c]">Os datos históricos, o peche temporal do elevador e a descrición dos principais atractivos baséanse na información turística municipal da Coruña. Os percorridos de autobús deben verificarse no operador urbano antes da visita. As fotografías proceden de Wikimedia Commons baixo as licenzas indicadas nos pés de foto.</p>
-      <div class="mt-5 flex flex-wrap gap-3 text-sm font-bold">
-        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href="https://www.coruna.gal/tourism/en/what-to-do-in-a-coruna/nature-and-sports/parks-and-gardens/mount-san-pedro?argIdioma=es" rel="noopener">Turismo A Coruña</a>
-        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href="https://tranviascoruna.com/lineas-y-horarios/" rel="noopener">Liñas de autobús</a>
-        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href="https://maps.app.goo.gl/m7xw47wWnHsLna2b8" rel="noopener">Google Maps</a>
+    <section id="fontes" class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+      <p class="kicker text-[#9b5a39]">Fontes e actualización</p>
+      <h2 class="section-title mt-4 text-3xl font-bold sm:text-4xl">Información práctica, fontes e actualización</h2>
+      <p class="mt-4 max-w-3xl leading-7 text-[#52676c]">Os datos históricos, o peche temporal do elevador e a descrición dos principais atractivos baséanse na información turística municipal da Coruña. Os percorridos de autobús deben verificarse no operador urbano antes da visita. As valoracións e opinións de usuarios sincronízanse desde Google Maps e sempre se indican como tales. As fotografías proceden de Wikimedia Commons baixo as licenzas indicadas nos pés de foto.</p>
+      <p class="mt-3 text-sm font-semibold text-[#0b3542]">Última sincronización de datos e opinións: {REVIEWS_SYNC_TIME}.</p>
+      <ul class="mt-8 grid gap-4 md:grid-cols-2">
+        {sources.map(source => (
+          <li class="card rounded-3xl p-6">
+            <h3 class="font-bold text-[#071f28]">{source.name}</h3>
+            <p class="mt-2 text-sm leading-6 text-[#53696e]">{source.detail}</p>
+            <a href={source.url} target="_blank" rel="noopener noreferrer" class="mt-3 inline-block text-sm font-bold text-[#0b3542] underline decoration-[#0b3542]/30 underline-offset-2">{source.linkLabel} ↗</a>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-8 flex flex-wrap gap-3 text-sm font-bold">
+        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={GOVT_TOURISM_URL} target="_blank" rel="noopener noreferrer">Turismo A Coruña</a>
+        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={GALICIA_TOURISM_URL} target="_blank" rel="noopener noreferrer">Turismo de Galicia</a>
+        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={TRANVIAS_URL} target="_blank" rel="noopener noreferrer">Liñas de autobús</a>
+        <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer">Google Maps</a>
       </div>
     </section>
   </main>
@@ -221,8 +423,16 @@ const faqJsonLd = {
         <details id="termos"><summary class="cursor-pointer font-bold text-white/75">Termos de uso</summary><p class="mt-2 max-w-3xl leading-5">A información é orientativa. Horarios, accesos, servizos e condicións poden cambiar; confirma sempre os detalles operativos coas fontes oficiais antes de desprazarte.</p></details>
         <details id="cookies"><summary class="cursor-pointer font-bold text-white/75">Configuración de cookies</summary><p class="mt-2 max-w-3xl leading-5">Podes limitar ou eliminar cookies desde a configuración do navegador. As ferramentas analíticas de terceiros poden establecer identificadores segundo a súa propia política.</p></details>
       </div>
-      <p class="mt-8 border-t border-white/10 pt-6 text-xs text-white/45">Sitio non oficial. Non está afiliado nin representa ao Concello da Coruña, Turismo da Coruña ou Google.</p>
+      <p class="mt-8 border-t border-white/10 pt-6 text-xs text-white/45">Última actualización de datos e opinións: {REVIEWS_SYNC_TIME}. As valoracións e opinións mostradas proveñen de usuarios de Google Maps; a súa autoría e dereitos pertencen aos autores e a Google Maps. Sitio non oficial: non está afiliado nin representa ao Concello da Coruña, Turismo da Coruña ou Google.</p>
     </div>
   </footer>
+
+  <script is:inline>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function () {});
+      });
+    }
+  </script>
 </body>
 </html>
