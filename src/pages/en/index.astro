@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GuideSections from '../../components/GuideSections.astro';
+import { content } from '../../i18n';
+
+const c = content.en;
+---
+<BaseLayout locale="en" path="/en/" content={c}>
+  <GuideSections locale="en" content={c} />
+</BaseLayout>

@@ -1,0 +1,305 @@
+---
+import {
+  ATTRACTION_FULL_NAME, CITY_NAME, STATE_PROVINCE, COUNTRY_NAME,
+  POSTAL_CODE, STREET_ADDRESS, PLUS_CODE, LATITUDE, LONGITUDE,
+  MAPS_SHARE_URL, MAPS_EMBED_SRC, GOVT_TOURISM_URL, GALICIA_TOURISM_URL,
+  TRANVIAS_URL, sources, RATING_VALUE_LABEL, RATING_COUNT_LABEL,
+  RATING_SOURCE_NOTE, REVIEWS_SOURCE_NOTE, SITE_NAME
+} from '../data/site';
+import { locales, pagePath, type Locale } from '../i18n';
+import type { Content } from '../i18n';
+
+interface Props { locale: Locale; content: Content; }
+const { locale, content } = Astro.props;
+
+const langSwitcher = locales.filter((l) => l !== locale);
+const langLabel: Record<Locale, string> = { gl: 'GL', es: 'ES', en: 'EN' };
+---
+<header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#071f28]/90 text-white backdrop-blur-xl">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 lg:px-8">
+    <a href="#inicio" class="flex items-center gap-3" aria-label="Volver ao inicio">
+      <img src="/logo.svg" alt={ATTRACTION_FULL_NAME} width="200" height="50" class="h-10 w-auto" />
+    </a>
+    <nav class="hidden gap-5 text-sm font-semibold md:flex" aria-label="Navegación principal">
+      <a href="#historia" class="hover:text-[#d4c6a8]">{content.nav.historia}</a>
+      <a href="#visita" class="hover:text-[#d4c6a8]">{content.nav.visita}</a>
+      <a href="#chegar" class="hover:text-[#d4c6a8]">{content.nav.chegar}</a>
+      <a href="#arredores" class="hover:text-[#d4c6a8]">{content.nav.arredores}</a>
+      <a href="#reviews" class="hover:text-[#d4c6a8]">{content.nav.opinions}</a>
+      <a href="#faq" class="hover:text-[#d4c6a8]">{content.nav.faq}</a>
+    </nav>
+    <div class="flex items-center gap-2 text-xs font-bold">
+      {langSwitcher.map((l) => (
+        <a href={pagePath(l)} hreflang={l} class="rounded-full border border-white/25 px-2.5 py-1 hover:bg-white/10">{langLabel[l]}</a>
+      ))}
+    </div>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="relative min-h-[92vh] overflow-hidden bg-[#071f28] text-white">
+    <img src="/images/canons-vickers.jpg" alt={`${ATTRACTION_FULL_NAME} - Canóns Vickers sobre o Atlántico na Coruña, España`} class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+    <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,31,40,.96)_0%,rgba(7,31,40,.78)_42%,rgba(7,31,40,.35)_72%,rgba(7,31,40,.6)_100%)]"></div>
+    <div class="grain absolute inset-0 opacity-30"></div>
+    <div class="relative mx-auto flex min-h-[92vh] max-w-7xl items-end px-5 pb-16 pt-36 lg:px-8 lg:pb-24">
+      <div class="max-w-3xl">
+        <p class="kicker mb-5 text-[#d4c6a8]">{content.hero.kicker}</p>
+        <h1 class="section-title text-6xl font-bold leading-[.94] sm:text-7xl lg:text-8xl">{content.hero.title1}<br/><span class="text-[#b9cfc8]">{content.hero.title2}</span><span class="mt-4 block text-2xl font-bold tracking-normal text-white/75 sm:text-3xl">{content.hero.cityLine}</span></h1>
+        <nav aria-label="Rastro de navegación" class="mt-6">
+          <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold text-white/60">
+            <li><a href="#inicio" class="hover:text-[#d4c6a8]">{ATTRACTION_FULL_NAME}</a></li>
+            <li aria-hidden="true">→</li>
+            <li>{content.hero.breadcrumb[1]}</li>
+            <li aria-hidden="true">→</li>
+            <li>{content.hero.breadcrumb[2]}</li>
+            <li aria-hidden="true">→</li>
+            <li>{content.hero.breadcrumb[3]}</li>
+          </ol>
+        </nav>
+        <p class="mt-7 max-w-2xl text-lg leading-8 text-white/80">{content.hero.intro}</p>
+        <div class="mt-9 flex flex-wrap gap-3 text-sm font-bold">
+          <a href="#visita" class="rounded-full bg-[#d4c6a8] px-6 py-3 text-[#071f28] hover:bg-white">{content.hero.ctaPlan}</a>
+          <a href="#reviews" class="rounded-full border border-white/30 px-6 py-3 hover:bg-white/10">{content.hero.ctaOpinions}</a>
+          <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="rounded-full border border-white/30 px-6 py-3 hover:bg-white/10">{content.hero.ctaMaps}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-[#0b3542] text-white">
+    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-px bg-white/10 sm:grid-cols-2 md:grid-cols-4">
+      <div class="bg-[#0b3542] p-6">
+        <div class="kicker text-white/50">{content.stats.ratingLabel}</div>
+        <div class="mt-2 text-3xl font-bold">{RATING_VALUE_LABEL} / 5</div>
+        <p class="mt-1 text-sm text-white/60">{content.stats.ratingSub}</p>
+        <p class="mt-3 text-xs leading-5 text-white/55">{RATING_SOURCE_NOTE} · <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="underline decoration-white/30 underline-offset-2 hover:text-white">Ver todas as opinións en Google Maps ↗</a></p>
+      </div>
+      <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">{content.stats.bestLabel}</div><div class="mt-2 text-3xl font-bold">360°</div><p class="mt-1 text-sm text-white/60">{content.stats.bestSub}</p></div>
+      <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">{content.stats.entryLabel}</div><div class="mt-2 text-3xl font-bold">{content.stats.entrySub}</div><p class="mt-1 text-sm text-white/60">{content.stats.entryNote}</p></div>
+      <div class="bg-[#0b3542] p-6"><div class="kicker text-white/50">{content.stats.timeLabel}</div><div class="mt-2 text-3xl font-bold">1–2 h</div><p class="mt-1 text-sm text-white/60">{content.stats.timeSub}</p></div>
+    </div>
+  </section>
+
+  <section id="sobre" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+    <div class="grid gap-12 lg:grid-cols-[1.05fr_.95fr] lg:items-start">
+      <div>
+        <p class="kicker text-[#9b5a39]">{content.sobre.kicker}</p>
+        <h2 class="section-title mt-4 text-4xl font-bold text-[#071f28] sm:text-5xl">{content.sobre.title}</h2>
+        {content.sobre.paragraphs.map((p) => (
+          <p class="mt-4 text-lg leading-8 text-[#344d54]">{p}</p>
+        ))}
+      </div>
+      <div class="card rounded-[2rem] p-7">
+        <p class="kicker text-[#0b3542]">{content.sobre.kicker}</p>
+        <dl class="mt-5 space-y-4 text-sm">
+          <div><dt class="font-bold text-[#071f28]">{content.sobre.ficha.official}</dt><dd class="mt-1 leading-6 text-[#4b6268]">{ATTRACTION_FULL_NAME} (parque e antiga batería costeira)</dd></div>
+          <div><dt class="font-bold text-[#071f28]">{content.sobre.ficha.address}</dt><dd class="mt-1 leading-6 text-[#4b6268]">{STREET_ADDRESS}, {POSTAL_CODE} {CITY_NAME}, {STATE_PROVINCE}, {COUNTRY_NAME}</dd></div>
+          <div><dt class="font-bold text-[#071f28]">{content.sobre.ficha.coords}</dt><dd class="mt-1 leading-6 text-[#4b6268]">{LATITUDE}, {LONGITUDE} · plus code {PLUS_CODE}</dd></div>
+          <div><dt class="font-bold text-[#071f28]">{content.sobre.ficha.rating}</dt><dd class="mt-1 leading-6 text-[#4b6268]">{RATING_VALUE_LABEL} / 5 · {RATING_COUNT_LABEL} opinións</dd></div>
+          <div><dt class="font-bold text-[#071f28]">{content.sobre.ficha.entry}</dt><dd class="mt-1 leading-6 text-[#4b6268]">{content.stats.entrySub}</dd></div>
+        </dl>
+        <p class="mt-5 border-t border-[#0b3542]/10 pt-4 text-xs leading-5 text-[#61757a]">{RATING_SOURCE_NOTE} · <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="underline decoration-[#61757a]/40 underline-offset-2">Ver todas as opinións en Google Maps ↗</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="historia" class="mx-auto max-w-7xl px-5 pb-20 lg:px-8 lg:pb-28">
+    <div class="grid gap-12 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
+      <div>
+        <p class="kicker text-[#9b5a39]">{content.historia.kicker}</p>
+        <h2 class="section-title mt-4 text-5xl font-bold text-[#071f28]">{content.historia.title}</h2>
+        {content.historia.paragraphs.map((p) => (
+          <p class="mt-7 text-lg leading-8 text-[#344d54]">{p}</p>
+        ))}
+        <div class="mt-8 border-l-4 border-[#9b5a39] pl-6 text-[#344d54]"><strong class="text-[#071f28]">{content.historia.highlight}</strong> {content.historia.highlightText}</div>
+      </div>
+      <figure class="overflow-hidden rounded-[2rem] bg-[#071f28] shadow-2xl">
+        <img src="/images/canons-vickers.jpg" alt={`Canóns Vickers do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}, ${COUNTRY_NAME}`} class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
+        <figcaption class="px-5 py-3 text-xs text-white/65">Foto: Contando Estrelas · CC BY-SA 2.0 · Wikimedia Commons</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="visita" class="bg-[#e6ebe4] py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <p class="kicker text-[#0b3542]">{content.visita.kicker}</p>
+      <h2 class="section-title mt-4 max-w-3xl text-5xl font-bold text-[#071f28]">{content.visita.title}</h2>
+      <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {content.visita.cards.map((card) => (
+          <article class="card rounded-3xl p-7"><span class="text-3xl">{card.icon}</span><h3 class="mt-5 text-xl font-bold">{card.title}</h3><p class="mt-3 leading-7 text-[#4b6268]">{card.text}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="miradoiro" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
+      <div>
+        <p class="kicker text-[#9b5a39]">{content.miradoiro.kicker}</p>
+        <h2 class="section-title mt-4 text-4xl font-bold text-[#071f28] sm:text-5xl">{content.miradoiro.title}</h2>
+        {content.miradoiro.paragraphs.map((p) => (
+          <p class="mt-7 text-lg leading-8 text-[#344d54]">{p}</p>
+        ))}
+      </div>
+      <div class="grid gap-4 sm:grid-cols-1">
+        {content.miradoiro.points.map((pt) => (
+          <div class="card rounded-3xl p-6"><h3 class="text-xl font-bold text-[#071f28]">{pt.title}</h3><p class="mt-2 leading-7 text-[#53696e]">{pt.text}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <figure class="order-2 overflow-hidden rounded-[2rem] bg-[#071f28] lg:order-1">
+        <img src="/images/cupula-atlantica.jpg" alt={`Cúpula Atlántica do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}, ${COUNTRY_NAME}`} class="aspect-[4/3] h-full w-full object-cover" loading="lazy" />
+        <figcaption class="px-5 py-3 text-xs text-white/65">Foto: Diego Delso · CC BY-SA 4.0 · Wikimedia Commons</figcaption>
+      </figure>
+      <div class="order-1 lg:order-2" id="cupula">
+        <p class="kicker text-[#9b5a39]">{content.cupula.kicker}</p>
+        <h2 class="section-title mt-4 text-4xl font-bold text-[#071f28]">{content.cupula.title}</h2>
+        {content.cupula.paragraphs.map((p) => (
+          <p class="mt-6 text-lg leading-8 text-[#445d63]">{p}</p>
+        ))}
+        <p class="mt-4 text-sm text-[#61757a]">{content.cupula.note}</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ascensor" class="bg-[#071f28] py-20 text-white lg:py-28">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <p class="kicker text-[#b9cfc8]">{content.ascensor.kicker}</p>
+      <h2 class="section-title mt-4 text-5xl font-bold">{content.ascensor.title}</h2>
+      {content.ascensor.paragraphs.map((p) => (
+        <p class="mt-6 max-w-3xl leading-8 text-white/70">{p}</p>
+      ))}
+      <p class="mt-4 text-sm text-[#b9cfc8]">{content.ascensor.note}</p>
+    </div>
+  </section>
+
+  <section id="chegar" class="bg-[#071f28] pb-20 text-white lg:pb-28">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <p class="kicker text-[#b9cfc8]">{content.chegar.kicker}</p>
+      <h2 class="section-title mt-4 text-5xl font-bold">{content.chegar.title}</h2>
+      <p class="mt-6 max-w-3xl leading-8 text-white/70">{content.chegar.intro}</p>
+      <div class="mt-10 grid gap-6 lg:grid-cols-3">
+        {content.chegar.cards.map((card) => (
+          <div class="rounded-3xl border border-white/15 p-7"><h3 class="text-xl font-bold">{card.title}</h3><p class="mt-3 leading-7 text-white/70">{card.text}</p></div>
+        ))}
+      </div>
+      <div class="mt-10 overflow-hidden rounded-[2rem] border border-white/15 bg-white/5 p-2">
+        <iframe title={`Mapa de localización do ${ATTRACTION_FULL_NAME} en ${CITY_NAME}`} src={MAPS_EMBED_SRC} width="100%" height="480" style="border:0;border-radius:1.4rem" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+      <p class="mt-6 text-sm leading-7 text-white/70">
+        {content.chegar.mapPre}
+        <a href={GOVT_TOURISM_URL} target="_blank" rel="noopener noreferrer" class="font-bold underline decoration-white/30 underline-offset-2 hover:text-[#d4c6a8]">{content.chegar.mapLinkLabel} · {COUNTRY_NAME} / {STATE_PROVINCE} ↗</a>
+        {content.chegar.mapPost}
+      </p>
+    </div>
+  </section>
+
+  <section id="arredores" class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+    <p class="kicker text-[#0b3542]">{content.arredores.kicker}</p>
+    <h2 class="section-title mt-4 max-w-4xl text-4xl font-bold text-[#071f28] sm:text-5xl">{content.arredores.title}</h2>
+    <div class="mt-12 grid gap-14 lg:grid-cols-2">
+      <div>
+        <h3 class="section-title text-3xl font-bold text-[#071f28]">{content.arredores.comerTitle}</h3>
+        <div class="mt-7 space-y-5">
+          {content.arredores.comerItems.map((item) => (
+            <div class="card rounded-3xl p-6"><h4 class="text-xl font-bold">{item.name}</h4><p class="mt-2 leading-7 text-[#53696e]">{item.text}</p></div>
+          ))}
+          <p class="text-sm text-[#61757a]">{content.arredores.comerNote}</p>
+        </div>
+      </div>
+      <div>
+        <h3 class="section-title text-3xl font-bold text-[#071f28]">{content.arredores.lugaresTitle}</h3>
+        <div class="mt-7 grid gap-4 sm:grid-cols-2">
+          {content.arredores.lugares.map((item) => (
+            <div class="rounded-3xl bg-[#dfe8e2] p-6"><h4 class="font-bold">{item.name}</h4><p class="mt-2 text-sm leading-6 text-[#52676c]">{item.text}</p></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" class="bg-[#0b3542] py-20 text-white lg:py-28">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <p class="kicker text-[#b9cfc8]">{content.opinions.kicker}</p>
+      <h2 class="section-title mt-4 text-4xl font-bold sm:text-5xl">{content.opinions.title}</h2>
+      <div class="mt-8 flex flex-wrap items-end gap-x-6 gap-y-3">
+        <p class="text-4xl font-bold">{RATING_VALUE_LABEL} / 5</p>
+        <p class="text-lg text-white/70">{RATING_COUNT_LABEL} opinións en Google Maps</p>
+        <p aria-label={`Valoración media ${RATING_VALUE_LABEL} sobre 5`} class="text-xl tracking-widest text-[#d4c6a8]">★★★★★</p>
+      </div>
+      <p class="mt-4 max-w-3xl text-xs leading-6 text-white/60">{REVIEWS_SOURCE_NOTE}</p>
+
+      <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {content.opinions.reviews.map((review) => (
+          <article class="rounded-3xl border border-white/15 bg-white/5 p-6">
+            <p class="text-sm tracking-widest text-[#d4c6a8]" aria-label={`Valoración ${review.rating} sobre 5`}>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</p>
+            <p class="mt-4 leading-7 text-white/80">“{review.text}”</p>
+            <p class="mt-5 text-xs font-semibold text-white/55">— Google Maps</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        <a href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer" class="rounded-full bg-[#d4c6a8] px-6 py-3 text-sm font-bold text-[#071f28] hover:bg-white">{content.opinions.ctaText}</a>
+        <p class="text-xs text-white/55">{content.opinions.ctaNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="bg-[#d9dfd3] py-20 lg:py-24">
+    <div class="mx-auto max-w-4xl px-5 lg:px-8">
+      <p class="kicker text-[#0b3542]">{content.nav.faq}</p>
+      <h2 class="section-title mt-4 text-5xl font-bold">{content.nav.faq} · {ATTRACTION_FULL_NAME}</h2>
+      <div class="mt-9 space-y-3">
+        {content.faq.map((item) => (
+          <details class="rounded-2xl bg-white/70 p-5"><summary class="cursor-pointer font-bold">{item.q}</summary><p class="mt-3 leading-7 text-[#53696e]">{item.a}</p></details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="fontes" class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+    <p class="kicker text-[#9b5a39]">{content.fontes.kicker}</p>
+    <h2 class="section-title mt-4 text-3xl font-bold sm:text-4xl">{content.fontes.title}</h2>
+    <p class="mt-4 max-w-3xl leading-7 text-[#52676c]">{content.fontes.intro}</p>
+    <p class="mt-3 text-sm font-semibold text-[#0b3542]">{content.fontes.syncNote}</p>
+    <ul class="mt-8 grid gap-4 md:grid-cols-2">
+      {sources.map((source) => (
+        <li class="card rounded-3xl p-6">
+          <h3 class="font-bold text-[#071f28]">{source.name}</h3>
+          <p class="mt-2 text-sm leading-6 text-[#53696e]">{source.detail}</p>
+          <a href={source.url} target="_blank" rel="noopener noreferrer" class="mt-3 inline-block text-sm font-bold text-[#0b3542] underline decoration-[#0b3542]/30 underline-offset-2">{source.linkLabel} ↗</a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-8 flex flex-wrap gap-3 text-sm font-bold">
+      <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={GOVT_TOURISM_URL} target="_blank" rel="noopener noreferrer">{content.fontes.ctaLabels.tourism}</a>
+      <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={GALICIA_TOURISM_URL} target="_blank" rel="noopener noreferrer">{content.fontes.ctaLabels.galicia}</a>
+      <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={TRANVIAS_URL} target="_blank" rel="noopener noreferrer">{content.fontes.ctaLabels.bus}</a>
+      <a class="rounded-full border border-[#0b3542]/20 px-4 py-2" href={MAPS_SHARE_URL} target="_blank" rel="noopener noreferrer">{content.fontes.ctaLabels.maps}</a>
+    </div>
+  </section>
+</main>
+
+<footer class="bg-[#061a21] px-5 py-12 text-white/70">
+  <div class="mx-auto max-w-7xl lg:px-3">
+    <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-start">
+      <div><img src="/logo.svg" alt={ATTRACTION_FULL_NAME} width="200" height="50" class="h-11 w-auto" /><p class="mt-4 max-w-xl text-sm leading-6">{content.footer.about}</p></div>
+      <div class="flex flex-wrap gap-4 text-sm">
+        <a href="#privacidade">{content.footer.legalLabels[0]}</a>
+        <a href="#termos">{content.footer.legalLabels[1]}</a>
+        <a href="#cookies">{content.footer.legalLabels[2]}</a>
+      </div>
+    </div>
+    <div class="mt-8 grid gap-3 text-xs text-white/55">
+      <details id="privacidade"><summary class="cursor-pointer font-bold text-white/75">{content.footer.legalLabels[0]}</summary><p class="mt-2 max-w-3xl leading-5">{content.footer.legal.privacidade}</p></details>
+      <details id="termos"><summary class="cursor-pointer font-bold text-white/75">{content.footer.legalLabels[1]}</summary><p class="mt-2 max-w-3xl leading-5">{content.footer.legal.termos}</p></details>
+      <details id="cookies"><summary class="cursor-pointer font-bold text-white/75">{content.footer.legalLabels[2]}</summary><p class="mt-2 max-w-3xl leading-5">{content.footer.legal.cookies}</p></details>
+    </div>
+    <p class="mt-8 border-t border-white/10 pt-6 text-xs text-white/45">{content.footer.bottomNote}</p>
+  </div>
+</footer>
